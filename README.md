@@ -1,16 +1,5 @@
 # Box Office Mojo CRUD App
 
-### Tech Stack
-
-- Python
-- Flask
-- SQLAlchemy & Alembic
-- Docker
-- SQLite & MySQL
-- AWS API Gateway
-- AWS Lambda
-- AWS RDS - MySQL
-
 ### Overview
 
 Utilizing dataset sourced from BoxOfficeMojo (BOM) Python WebScraper, , this CRUD App will be utilized as the backend APIs to access and manipulate the BOM dataset.
@@ -33,7 +22,7 @@ Source Dataset:
     Genres (str)
     URL (str)
 
-BOM Crud Models:
+### BOM Crud Models
 
     Title
         id (int)
@@ -64,10 +53,9 @@ BOM Crud Models:
     MPAARating
         id (int)
         MPAARating (str)
-
 * More descriptive information to be added to Genre, Distributor, MPAARating models, which will subsequently allow for more robust analytics.
 
-APIs:
+### APIs
 
     GET (2)
         /titles -> get all titles w/ pagination
@@ -84,9 +72,20 @@ APIs:
         /titles -> delete all titles
         /titles/{name} -> delete a single title
 
-# TODO
+### Tech Stack
+
+- Python
+- Flask
+- SQLAlchemy & Alembic
+- Docker
+- SQLite & MySQL
+- AWS API Gateway
+- AWS Lambda
+- AWS RDS - MySQL
+
+### TODO
 Add:
-- Add reset database migrations
+- Add reset database migration
 - OPTIONS endpoint
 - API Documentation w/ Swagger
 - Add Top X GET APIs
