@@ -5,22 +5,22 @@
 Utilizing dataset sourced from BoxOfficeMojo (BOM) Python WebScraper, , this CRUD App will be utilized as the backend APIs to access and manipulate the BOM dataset.
 
 Source Dataset:
-    id (int)
-    Title (str)
-    Distributor (str)
-    Genre (str)
-    MPAARating (str)
-    ProductionBudget (str)
-    ReleaseDate (str)
-    Runtime (str)
-    DomesticGross (str)
-    ForeignGross (str)
-    WorldwideGross (str)
-    OpeningWeekendGross (str)
-    OpeningWeekendTheaters (str)
-    WidestTheaters (str)
-    Genres (str)
-    URL (str)
+- id (int)
+- Title (str)
+- Distributor (str)
+- Genre (str)
+- MPAARating (str)
+- ProductionBudget (str)
+- ReleaseDate (str)
+- Runtime (str)
+- DomesticGross (str)
+- ForeignGross (str)
+- WorldwideGross (str)
+- OpeningWeekendGross (str)
+- OpeningWeekendTheaters (str)
+- WidestTheaters (str)
+- Genres (str)
+- URL (str)
 
 ### BOM Crud Models
 
