@@ -4,7 +4,8 @@
 
 Utilizing dataset sourced from BoxOfficeMojo (BOM) Python WebScraper, https://github.com/DemondLove/BoxOfficeMojo-Python-WebScraper, this CRUD App will be utilized as the backend APIs to access and manipulate the BOM dataset.
 
-Source Dataset:
+### Source Dataset
+
 - id (int)
 - Title (str)
 - Distributor (str)
@@ -60,8 +61,8 @@ Source Dataset:
     GET (2)
         /titles -> get all titles w/ pagination
         /titles/{name} -> get single title
-    POST -> create a new title
-        /titles
+    POST
+        /titles -> create a new title
     PUT
         /titles -> batch update all titles
         /titles/{name} -> update a single title
