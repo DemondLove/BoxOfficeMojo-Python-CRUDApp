@@ -65,26 +65,28 @@ BOM Crud Models:
         id (int)
         MPAARating (str)
 
-* More descriptive information to be added to Genre and Distributor model, which will subsequently allow for more robust analytics.
+* More descriptive information to be added to Genre, Distributor, MPAARating models, which will subsequently allow for more robust analytics.
 
 APIs:
-- GET (2)
-    /titles -> get all titles w/ pagination
-    /titles/{name} -> get single title
-- POST -> create a new title
-    /titles
-- PUT
-    /titles -> batch update all titles
-    /titles/{name} -> update a single title
-- PATCH
-    /titles -> batch partial update all titles
-    /titles/{name} -> partial update a single title
-- DELETE
-    /titles -> delete all titles
-    /titles/{name} -> delete a single title
+
+    GET (2)
+        /titles -> get all titles w/ pagination
+        /titles/{name} -> get single title
+    POST -> create a new title
+        /titles
+    PUT
+        /titles -> batch update all titles
+        /titles/{name} -> update a single title
+    PATCH
+        /titles -> batch partial update all titles
+        /titles/{name} -> partial update a single title
+    DELETE
+        /titles -> delete all titles
+        /titles/{name} -> delete a single title
 
 # TODO
 Add:
 - Add reset database migrations
 - OPTIONS endpoint
 - API Documentation w/ Swagger
+- Add Top X GET APIs
