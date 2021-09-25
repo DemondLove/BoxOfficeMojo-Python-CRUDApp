@@ -34,10 +34,10 @@ Source Dataset:
     URL (str)
 
 BOM Crud Models:
+
     Title
         id (int)
         Title (str)
-
         ProductionBudget (int)
         ReleaseDate (date)
         Runtime (int)
