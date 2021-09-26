@@ -60,18 +60,18 @@ Utilizing dataset sourced from BoxOfficeMojo (BOM) Python WebScraper, https://gi
 
     GET (2)
         /titles -> get all titles w/ pagination
-        /titles/{name} -> get single title
+        /titles/{id} -> get single title
     POST
         /titles -> create a new title
     PUT
         /titles -> batch update all titles
-        /titles/{name} -> update a single title
+        /titles/{id} -> update a single title
     PATCH
         /titles -> batch partial update all titles
-        /titles/{name} -> partial update a single title
+        /titles/{id} -> partial update a single title
     DELETE
         /titles -> delete all titles
-        /titles/{name} -> delete a single title
+        /titles/{id} -> delete a single title
 
 ### Tech Stack
 
