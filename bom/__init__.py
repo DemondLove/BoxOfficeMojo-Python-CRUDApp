@@ -8,4 +8,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-from views import titleapi
+# db.create_all()
+
+from bom import views

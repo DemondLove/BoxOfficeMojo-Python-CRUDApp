@@ -1,13 +1,15 @@
-from views import app, db
+from bom import app, db
 from flask import request, jsonify, make_response
-from views.models.title import Title
+from bom.models import Title
 
 @app.route('/', methods=['GET'])
 def index():
     '''
     API root
     '''
-    return {'message': 'Welcome to BoxOfficeMojo CRUD App'}, 200
+    response = Title.query.first()
+
+    return {'message': 'Welcome to BoxOfficeMojo CRUD App {}'.format(response.title)}, 200
 
 
 @app.route('/titles', methods=['GET'])
