@@ -1,4 +1,5 @@
-from views import app
+from bom import create_app, db
+
 import unittest
 
 
@@ -6,7 +7,12 @@ class FlaskTest(unittest.TestCase):
 
     # Check for response 200
     def test_index_statuscode(self):
-        client = app.test_client(self)
+        self.app = create_app('test')
+        self.app_context = self.app.app_context()
+        self.app_context.push()
+        db.create_all()
+
+        client = self.app.test_client(self)
 
         response = client.get('/')
 
@@ -16,7 +22,12 @@ class FlaskTest(unittest.TestCase):
 
     # Check if response is application/json
     def test_index_responsetype(self):
-        client = app.test_client(self)
+        self.app = create_app('test')
+        self.app_context = self.app.app_context()
+        self.app_context.push()
+        db.create_all()
+
+        client = self.app.test_client(self)
 
         response = client.get('/')
 
@@ -27,7 +38,12 @@ class FlaskTest(unittest.TestCase):
 
     # Check response content
     def test_index_responsecontent(self):
-        client = app.test_client(self)
+        self.app = create_app('test')
+        self.app_context = self.app.app_context()
+        self.app_context.push()
+        db.create_all()
+
+        client = self.app.test_client(self)
 
         response = client.get('/')
 
