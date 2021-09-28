@@ -69,7 +69,7 @@ def patchTitle(id):
     return {'message': 'API will partially update {} title'.format(id)}, 200
 
 
-@app.route('/titles', methods=['DELETE'])
+@view.route('/titles', methods=['DELETE'])
 def deleteTitles():
     '''
     Delete all titles
@@ -77,7 +77,7 @@ def deleteTitles():
     return {'message': 'API will delete all titles'}, 200
 
 
-@app.route('/titles/<id>', methods=['DELETE'])
+@view.route('/titles/<id>', methods=['DELETE'])
 def deleteTitle(id):
     '''
     Delete a single title

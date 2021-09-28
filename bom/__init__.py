@@ -14,7 +14,7 @@ def create_app(config_name):
 
     db.init_app(app)
 
-    from views import view
+    from .views import view
     app.register_blueprint(view)
-    
+
     return app
