@@ -1,13 +1,20 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from config import config
 
-app = Flask(__name__)
+db = SQLAlchemy()
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///sql.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+def create_app(config_name):
+    app = Flask(__name__)
 
-db = SQLAlchemy(app)
+    app.config.from_object(config[config_name])
 
-# db.create_all()
+    # Why?
+    config[config_name].init_app(app)
 
-from bom import views
+    db.init_app(app)
+
+    from views import view
+    app.register_blueprint(view)
+    
+    return app
