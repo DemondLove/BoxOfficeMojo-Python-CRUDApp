@@ -3,3 +3,7 @@ venv/
 __pycache__
 
 bak/
+
+data-dev.sqlite
+data.sqlite
+data-test.sqlite
