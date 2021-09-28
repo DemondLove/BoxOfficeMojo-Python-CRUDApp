@@ -10,7 +10,7 @@ def index():
     API root
     '''
     response = Title.query.first()
-
+    
     return {'message': 'Welcome to BoxOfficeMojo CRUD App {}'.format(response.title)}, 200
 
 @view.route('/titles', methods=['GET'])
@@ -68,14 +68,12 @@ def patchTitle(id):
     '''
     return {'message': 'API will partially update {} title'.format(id)}, 200
 
-
 @view.route('/titles', methods=['DELETE'])
 def deleteTitles():
     '''
     Delete all titles
     '''
     return {'message': 'API will delete all titles'}, 200
-
 
 @view.route('/titles/<id>', methods=['DELETE'])
 def deleteTitle(id):
