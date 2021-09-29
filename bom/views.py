@@ -1,8 +1,29 @@
 from bom import db
-from flask import Blueprint, request, jsonify, make_response
+from flask import Blueprint, request, jsonify, make_response, abort
 from bom.models import Title
 
 view = Blueprint('view', __name__)
+
+# Status Code Errors
+@view.errorhandler(400)
+def handle_400_error(_error):
+    return make_response(jsonify({'Error': 'Bad Request'}), 400)
+
+@view.errorhandler(404)
+def handle_404_error(_error):
+    return make_response(jsonify({'Error': 'Endpoint Not Found'}), 404)
+
+@view.errorhandler(405)
+def handle_405_error(_error):
+    return make_response(jsonify({'Error': 'Method Not Allowed'}), 405)
+
+@view.errorhandler(422)
+def handle_422_error(_error):
+    return make_response(jsonify({'Error': 'Unreachable Entity'}), 422)
+
+@view.errorhandler(500)
+def handle_500_error(_error):
+    return make_response(jsonify({'Error': 'Internal Server Error'}), 500)
 
 @view.route('/', methods=['GET'])
 def index():
@@ -20,12 +41,23 @@ def getTitles():
     '''
     return {'message': 'API will return all titles'}, 200
 
-@view.route('/titles/<id>', methods=['GET'])
+@view.route('/titles/<int:id>', methods=['GET'])
 def getTitle(id):
     '''
     Get a single title
     '''
-    return {'message': 'API will return {} title'.format(id)}, 200
+    error = False
+    body = {}
+
+    try:
+        body['title'] = Title.getTitleByID(id)
+    except Exception as e:
+        error = True
+
+    if error:
+        abort(422)
+    else:
+        return jsonify(body), 200
 
 @view.route('/titles', methods=['POST'])
 def postTitles():
