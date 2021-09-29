@@ -1,20 +1,30 @@
 from bom import create_app, db
+from bom.models import Title
 
 import unittest
 
 
 class FlaskTest(unittest.TestCase):
 
-    # Check for response 200
-    def test_index_statuscode(self):
+    def setUp(self):
         self.app = create_app('test')
         self.app_context = self.app.app_context()
         self.app_context.push()
         db.create_all()
+        title = Title(title='Black Swan')
+        db.session.add(title)
+        db.session.commit()
+        self.client = self.app.test_client()
 
-        client = self.app.test_client(self)
+    def tearDown(self):
+        db.session.remove()
+        db.drop_all()
+        self.app_context.pop()
 
-        response = client.get('/')
+    # Check for response 200
+    def test_index_statuscode(self):
+
+        response = self.client.get('/')
 
         statuscode = response.status_code
 
@@ -22,14 +32,8 @@ class FlaskTest(unittest.TestCase):
 
     # Check if response is application/json
     def test_index_responsetype(self):
-        self.app = create_app('test')
-        self.app_context = self.app.app_context()
-        self.app_context.push()
-        db.create_all()
 
-        client = self.app.test_client(self)
-
-        response = client.get('/')
+        response = self.client.get('/')
 
         response_type = response.is_json
 
@@ -38,18 +42,11 @@ class FlaskTest(unittest.TestCase):
 
     # Check response content
     def test_index_responsecontent(self):
-        self.app = create_app('test')
-        self.app_context = self.app.app_context()
-        self.app_context.push()
-        db.create_all()
-
-        client = self.app.test_client(self)
-
-        response = client.get('/')
+        response = self.client.get('/')
 
         response_message = response.get_json()
 
-        self.assertEqual(response_message['message'], "Welcome to BoxOfficeMojo CRUD App")
+        self.assertEqual(response_message['message'], "Welcome to the BoxOfficeMojo CRUD App")
 
 
 if __name__ == '__main__':

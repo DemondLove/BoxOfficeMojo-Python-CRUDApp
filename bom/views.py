@@ -30,9 +30,8 @@ def index():
     '''
     API root
     '''
-    response = Title.query.first()
     
-    return {'message': 'Welcome to BoxOfficeMojo CRUD App {}'.format(response.title)}, 200
+    return {'message': 'Welcome to the BoxOfficeMojo CRUD App'}, 200
 
 @view.route('/titles', methods=['GET'])
 def getTitles():
