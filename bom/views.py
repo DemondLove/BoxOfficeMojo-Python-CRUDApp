@@ -146,9 +146,10 @@ def putTitle(id):
                 return_status = 200
             else:
                 request_title = Title(title=input_request['title'])
+                db.session.add(request_title)
                 return_status = 201
 
-            db.session.add(request_title)
+            
             db.session.commit()
 
             body['title'] = request_title.title
