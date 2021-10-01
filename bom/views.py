@@ -120,13 +120,6 @@ def postTitles():
     else:
         return make_response(jsonify(body), 201)
 
-@view.route('/titles', methods=['PUT'])
-def putTitles():
-    '''
-    Update all titles
-    '''
-    return {'message': 'API will update all titles'}, 200
-
 @view.route('/titles/<id>', methods=['PUT'])
 def putTitle(id):
     '''
@@ -134,12 +127,6 @@ def putTitle(id):
     '''
     return {'message': 'API will update {} title'.format(id)}, 200
 
-@view.route('/titles', methods=['PATCH'])
-def patchTitles():
-    '''
-    Partially update all titles
-    '''
-    return {'message': 'API will partially update all titles'}, 200
 
 @view.route('/titles/<id>', methods=['PATCH'])
 def patchTitle(id):
@@ -148,16 +135,29 @@ def patchTitle(id):
     '''
     return {'message': 'API will partially update {} title'.format(id)}, 200
 
-@view.route('/titles', methods=['DELETE'])
-def deleteTitles():
-    '''
-    Delete all titles
-    '''
-    return {'message': 'API will delete all titles'}, 200
-
-@view.route('/titles/<id>', methods=['DELETE'])
+@view.route('/titles/<int:id>', methods=['DELETE'])
 def deleteTitle(id):
     '''
     Delete a single title
+
+    Parameters:
+        id (int): primary key of the target
     '''
-    return {'message': 'API will delete {} title'.format(id)}, 200
+    error = False
+    body = {}
+
+    try:
+        input_title = Title.query.get(id)
+        db.session.delete(input_title)
+        db.session.commit()
+        body['message'] = 'Resource Successsfully Deleted'
+    except Exception as e:
+        error = True
+        print('Error Occured: ', e)
+    finally:
+        db.session.close()
+
+    if error:
+        abort(422)
+    else:
+        return make_response(jsonify(body), 204)

@@ -59,19 +59,16 @@ Utilizing dataset sourced from BoxOfficeMojo (BOM) Python WebScraper, https://gi
 ### APIs
 
     GET (2)
-        /titles -> get all titles w/ pagination
-        /titles/{id} -> get single title
+        /api/v1/titles -> get all titles w/ pagination
+        /api/v1/titles/{id} -> get single title
     POST
-        /titles -> create a new title
+        /api/v1/titles -> create a new title
     PUT
-        /titles -> batch update all titles
-        /titles/{id} -> update a single title
+        /api/v1/titles/{id} -> update a single title
     PATCH
-        /titles -> batch partial update all titles
-        /titles/{id} -> partial update a single title
+        /api/v1/titles/{id} -> partial update a single title
     DELETE
-        /titles -> delete all titles
-        /titles/{id} -> delete a single title
+        /api/v1/titles/{id} -> delete a single title
 
 ### Tech Stack
 

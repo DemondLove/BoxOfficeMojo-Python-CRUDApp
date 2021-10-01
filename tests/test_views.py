@@ -105,7 +105,7 @@ class FlaskTest(unittest.TestCase):
         self.assertEqual(response_message['title'], 'Rick and Morty')
         self.assertEqual(response_message['id'], 9)
 
-    def test_deleteTitles(self):
+    def test_postTitles(self):
         response = self.client.post('/titles'
                                    , headers={'Content-Type': 'application/json'}
                                    , data=json.dumps({'title': 'Rick and Morty'}))
@@ -129,6 +129,21 @@ class FlaskTest(unittest.TestCase):
         # Check response content: client recieves id and title
         self.assertEqual(response_message['title'], 'Rick and Morty')
         self.assertEqual(response_message['id'], 9)
+
+    def test_deleteTitle(self):
+        response = self.client.delete('/titles/1')
+        
+        statuscode = response.status_code
+
+        # Check for response 204
+        self.assertEqual(statuscode, 204)
+
+        response = self.client.get('/titles/1')
+
+        statuscode = response.status_code
+
+        # Check for response 422
+        self.assertEqual(statuscode, 422)
 
 
 if __name__ == '__main__':
