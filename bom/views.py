@@ -29,34 +29,61 @@ def handle_500_error(_error):
 def index():
     '''
     API root
+
+    Returns:
+        body (JSON) - {'message': 'Welcome to the BoxOfficeMojo CRUD App'}
     '''
     
-    return {'message': 'Welcome to the BoxOfficeMojo CRUD App'}, 200
+    return make_response(jsonify({'message': 'Welcome to the BoxOfficeMojo CRUD App'}), 200)
 
 @view.route('/titles', methods=['GET'])
 def getTitles():
     '''
     Get all titles w/ pagination
-    '''
-    return {'message': 'API will return all titles'}, 200
 
-@view.route('/titles/<int:id>', methods=['GET'])
-def getTitle(id):
-    '''
-    Get a single title
+    Returns:
+        body (JSON) - {'message': 'Welcome to the BoxOfficeMojo CRUD App'}
     '''
     error = False
     body = {}
 
     try:
-        body['title'] = Title.getTitleByID(id)
+        query_results = Title.query.all()
+        all_titles = [result.title for result in query_results]
+        body = {'message': all_titles}
     except Exception as e:
         error = True
+        print('Error Occured: ', e)
+
+    if error:
+        abort(500)
+    else:
+        return make_response(jsonify(body), 200)
+
+@view.route('/titles/<int:id>', methods=['GET'])
+def getTitle(id):
+    '''
+    Get a single title
+
+    Parameters:
+        id (int): primary key of the target
+
+    Returns:
+        body (JSON) - {'message': 'Welcome to the BoxOfficeMojo CRUD App'}
+    '''
+    error = False
+    body = {}
+
+    try:
+        body['message'] = Title.getTitleByID(id)
+    except Exception as e:
+        error = True
+        print('Error Occured: ', e)
 
     if error:
         abort(422)
     else:
-        return jsonify(body), 200
+        return make_response(jsonify(body), 200)
 
 @view.route('/titles', methods=['POST'])
 def postTitles():
