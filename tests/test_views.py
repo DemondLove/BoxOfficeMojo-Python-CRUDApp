@@ -30,7 +30,7 @@ class FlaskTest(unittest.TestCase):
         self.app_context.pop()
 
     def test_index(self):
-        response = self.client.get('/')
+        response = self.client.get('/api/v1/')
         
         statuscode = response.status_code
         response_type = response.is_json
@@ -44,7 +44,7 @@ class FlaskTest(unittest.TestCase):
         self.assertEqual(response_message['message'], "Welcome to the BoxOfficeMojo CRUD App")
 
     def test_getTitles(self):
-        response = self.client.get('/titles')
+        response = self.client.get('/api/v1/titles')
         
         statuscode = response.status_code
         response_type = response.is_json
@@ -65,7 +65,7 @@ class FlaskTest(unittest.TestCase):
                                                       ,{'id': 8, 'title': 'The Bourne Identity'}])
 
     def test_getTitle(self):
-        response = self.client.get('/titles/1')
+        response = self.client.get('/api/v1/titles/1')
         
         statuscode = response.status_code
         response_type = response.is_json
@@ -81,7 +81,7 @@ class FlaskTest(unittest.TestCase):
 
 
     def test_postTitles(self):
-        response = self.client.post('/titles'
+        response = self.client.post('/api/v1/titles'
                                    , headers={'Content-Type': 'application/json'}
                                    , data=json.dumps({'title': 'Rick and Morty'}))
         
@@ -97,32 +97,7 @@ class FlaskTest(unittest.TestCase):
         self.assertEqual(response_message['title'], 'Rick and Morty')
         self.assertEqual(response_message['id'], 9)
 
-        response = self.client.get('/titles/9')
-        
-        response_message = response.get_json()
-        
-        # Check response content: client recieves id and title
-        self.assertEqual(response_message['title'], 'Rick and Morty')
-        self.assertEqual(response_message['id'], 9)
-
-    def test_postTitles(self):
-        response = self.client.post('/titles'
-                                   , headers={'Content-Type': 'application/json'}
-                                   , data=json.dumps({'title': 'Rick and Morty'}))
-        
-        statuscode = response.status_code
-        response_type = response.is_json
-        response_message = response.get_json()
-
-        # Check for response 201
-        self.assertEqual(statuscode, 201)
-        # Check if response is application/json
-        self.assertEqual(response_type, True)
-        # Check response content: client recieves id and title
-        self.assertEqual(response_message['title'], 'Rick and Morty')
-        self.assertEqual(response_message['id'], 9)
-
-        response = self.client.get('/titles/9')
+        response = self.client.get('/api/v1/titles/9')
         
         response_message = response.get_json()
         
@@ -131,7 +106,7 @@ class FlaskTest(unittest.TestCase):
         self.assertEqual(response_message['id'], 9)
 
     def test_putTitle(self):
-        response = self.client.put('/titles/14'
+        response = self.client.put('/api/v1/titles/14'
                                    , headers={'Content-Type': 'application/json'}
                                    , data=json.dumps({'title': 'A Clockwork Orange'}))
         
@@ -147,7 +122,7 @@ class FlaskTest(unittest.TestCase):
         self.assertEqual(response_message['title'], 'A Clockwork Orange')
         self.assertEqual(response_message['id'], 9)
 
-        response = self.client.put('/titles/9'
+        response = self.client.put('/api/v1/titles/9'
                                    , headers={'Content-Type': 'application/json'}
                                    , data=json.dumps({'title': '2001: A Space Odyssey'}))
         
@@ -164,14 +139,14 @@ class FlaskTest(unittest.TestCase):
         self.assertEqual(response_message['id'], 9)
 
     def test_deleteTitle(self):
-        response = self.client.delete('/titles/1')
+        response = self.client.delete('/api/v1/titles/1')
         
         statuscode = response.status_code
 
         # Check for response 204
         self.assertEqual(statuscode, 204)
 
-        response = self.client.get('/titles/1')
+        response = self.client.get('/api/v1/titles/1')
 
         statuscode = response.status_code
 
