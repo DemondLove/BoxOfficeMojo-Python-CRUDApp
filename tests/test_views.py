@@ -1,7 +1,6 @@
 from bom import create_app, db
 from bom.models import Title
-
-import unittest
+import unittest, json
 
 
 class FlaskTest(unittest.TestCase):
@@ -31,7 +30,6 @@ class FlaskTest(unittest.TestCase):
         self.app_context.pop()
 
     def test_index(self):
-
         response = self.client.get('/')
         
         statuscode = response.status_code
@@ -42,11 +40,10 @@ class FlaskTest(unittest.TestCase):
         self.assertEqual(statuscode, 200)
         # Check if response is application/json
         self.assertEqual(response_type, True)
-        # Check response content: client recieves welcom message
+        # Check response content: client recieves welcome message
         self.assertEqual(response_message['message'], "Welcome to the BoxOfficeMojo CRUD App")
 
     def test_getTitles(self):
-
         response = self.client.get('/titles')
         
         statuscode = response.status_code
@@ -57,11 +54,17 @@ class FlaskTest(unittest.TestCase):
         self.assertEqual(statuscode, 200)
         # Check if response is application/json
         self.assertEqual(response_type, True)
-        # Check response content: client recieves welcom message
-        self.assertEqual(response_message['message'], ['Black Swan', 'The Grand Budapest Hotel', 'Scream', 'The Dark Knight', 'Drive', 'Somewhere', 'Community', 'The Bourne Identity'])
+        # Check response content: client recieves all ids and titles
+        self.assertEqual(response_message['titles'], [{'id': 1, 'title': 'Black Swan'}
+                                                      ,{'id': 2, 'title': 'The Grand Budapest Hotel'}
+                                                      ,{'id': 3, 'title': 'Scream'}
+                                                      ,{'id': 4, 'title': 'The Dark Knight'}
+                                                      ,{'id': 5, 'title': 'Drive'}
+                                                      ,{'id': 6, 'title': 'Somewhere'}
+                                                      ,{'id': 7, 'title': 'Community'}
+                                                      ,{'id': 8, 'title': 'The Bourne Identity'}])
 
     def test_getTitle(self):
-
         response = self.client.get('/titles/1')
         
         statuscode = response.status_code
@@ -72,8 +75,61 @@ class FlaskTest(unittest.TestCase):
         self.assertEqual(statuscode, 200)
         # Check if response is application/json
         self.assertEqual(response_type, True)
-        # Check response content: client recieves welcom message
-        self.assertEqual(response_message['message'], "Black Swan")
+        # Check response content: client recieves id and title
+        self.assertEqual(response_message['title'], 'Black Swan')
+        self.assertEqual(response_message['id'], 1)
+
+
+    def test_postTitles(self):
+        response = self.client.post('/titles'
+                                   , headers={'Content-Type': 'application/json'}
+                                   , data=json.dumps({'title': 'Rick and Morty'}))
+        
+        statuscode = response.status_code
+        response_type = response.is_json
+        response_message = response.get_json()
+
+        # Check for response 201
+        self.assertEqual(statuscode, 201)
+        # Check if response is application/json
+        self.assertEqual(response_type, True)
+        # Check response content: client recieves id and title
+        self.assertEqual(response_message['title'], 'Rick and Morty')
+        self.assertEqual(response_message['id'], 9)
+
+        response = self.client.get('/titles/9')
+        
+        response_message = response.get_json()
+        
+        # Check response content: client recieves id and title
+        self.assertEqual(response_message['title'], 'Rick and Morty')
+        self.assertEqual(response_message['id'], 9)
+
+    def test_deleteTitles(self):
+        response = self.client.post('/titles'
+                                   , headers={'Content-Type': 'application/json'}
+                                   , data=json.dumps({'title': 'Rick and Morty'}))
+        
+        statuscode = response.status_code
+        response_type = response.is_json
+        response_message = response.get_json()
+
+        # Check for response 201
+        self.assertEqual(statuscode, 201)
+        # Check if response is application/json
+        self.assertEqual(response_type, True)
+        # Check response content: client recieves id and title
+        self.assertEqual(response_message['title'], 'Rick and Morty')
+        self.assertEqual(response_message['id'], 9)
+
+        response = self.client.get('/titles/9')
+        
+        response_message = response.get_json()
+        
+        # Check response content: client recieves id and title
+        self.assertEqual(response_message['title'], 'Rick and Morty')
+        self.assertEqual(response_message['id'], 9)
+
 
 if __name__ == '__main__':
     unittest.main()

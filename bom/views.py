@@ -42,15 +42,15 @@ def getTitles():
     Get all titles w/ pagination
 
     Returns:
-        body (JSON) - {'message': 'Welcome to the BoxOfficeMojo CRUD App'}
+        body (JSON) - {'titles': [{'id': <id>, 'title': <title>}, {'id': <id>, 'title': <title>}, ...]}
     '''
     error = False
     body = {}
 
     try:
         query_results = Title.query.all()
-        all_titles = [result.title for result in query_results]
-        body = {'message': all_titles}
+        all_titles = [{'id': result.id, 'title': result.title} for result in query_results]
+        body = {'titles': all_titles}
     except Exception as e:
         error = True
         print('Error Occured: ', e)
@@ -69,13 +69,14 @@ def getTitle(id):
         id (int): primary key of the target
 
     Returns:
-        body (JSON) - {'message': 'Welcome to the BoxOfficeMojo CRUD App'}
+        body (JSON) - {'id': <id>, 'title': '<title>'}
     '''
     error = False
     body = {}
 
     try:
-        body['message'] = Title.getTitleByID(id)
+        body['title'] = Title.getTitleByID(id)
+        body['id'] = id
     except Exception as e:
         error = True
         print('Error Occured: ', e)
@@ -89,14 +90,35 @@ def getTitle(id):
 def postTitles():
     '''
     Create a new title
-    '''
-    if request.is_json:
-        input_request = request.get_json()
 
-    response = {
-        "message": "API will create new title"
-    }
-    return make_response(jsonify(response), 200)
+    Returns:
+        body (JSON) - {'id': <id>, 'title': '<title>'}
+    '''
+    error = False
+    body = {}
+
+    try:
+        if request.is_json:
+            input_request = request.get_json()
+            
+            input_title = Title(title=input_request['title'])
+            db.session.add(input_title)
+            db.session.commit()
+
+            body['title'] = input_title.title
+            body['id'] = input_title.id
+        else:
+            abort(400)
+    except Exception as e:
+        error = True
+        print('Error Occured: ', e)
+    finally:
+        db.session.close()
+
+    if error:
+        abort(422)
+    else:
+        return make_response(jsonify(body), 201)
 
 @view.route('/titles', methods=['PUT'])
 def putTitles():
