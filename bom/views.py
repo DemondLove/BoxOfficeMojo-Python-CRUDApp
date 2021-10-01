@@ -29,87 +29,167 @@ def handle_500_error(_error):
 def index():
     '''
     API root
+
+    Returns:
+        body (JSON) - {'message': 'Welcome to the BoxOfficeMojo CRUD App'}
     '''
-    response = Title.query.first()
     
-    return {'message': 'Welcome to BoxOfficeMojo CRUD App {}'.format(response.title)}, 200
+    return make_response(jsonify({'message': 'Welcome to the BoxOfficeMojo CRUD App'}), 200)
 
 @view.route('/titles', methods=['GET'])
 def getTitles():
     '''
     Get all titles w/ pagination
+
+    Returns:
+        body (JSON) - {'titles': [{'id': <id>, 'title': <title>}, {'id': <id>, 'title': <title>}, ...]}
     '''
-    return {'message': 'API will return all titles'}, 200
+    error = False
+    body = {}
+
+    try:
+        query_results = Title.query.all()
+        all_titles = [{'id': result.id, 'title': result.title} for result in query_results]
+        body = {'titles': all_titles}
+    except Exception as e:
+        error = True
+        print('Error Occured: ', e)
+
+    if error:
+        abort(500)
+    else:
+        return make_response(jsonify(body), 200)
 
 @view.route('/titles/<int:id>', methods=['GET'])
 def getTitle(id):
     '''
     Get a single title
+
+    Parameters:
+        id (int): primary key of the target
+
+    Returns:
+        body (JSON) - {'id': <id>, 'title': '<title>'}
     '''
     error = False
     body = {}
 
     try:
         body['title'] = Title.getTitleByID(id)
+        body['id'] = id
     except Exception as e:
         error = True
+        print('Error Occured: ', e)
 
     if error:
         abort(422)
     else:
-        return jsonify(body), 200
+        return make_response(jsonify(body), 200)
 
 @view.route('/titles', methods=['POST'])
 def postTitles():
     '''
     Create a new title
-    '''
-    if request.is_json:
-        input_request = request.get_json()
 
-    response = {
-        "message": "API will create new title"
-    }
-    return make_response(jsonify(response), 200)
-
-@view.route('/titles', methods=['PUT'])
-def putTitles():
+    Returns:
+        body (JSON) - {'id': <id>, 'title': '<title>'}
     '''
-    Update all titles
-    '''
-    return {'message': 'API will update all titles'}, 200
+    error = False
+    body = {}
 
-@view.route('/titles/<id>', methods=['PUT'])
+    try:
+        if request.is_json:
+            input_request = request.get_json()
+            
+            input_title = Title(title=input_request['title'])
+            db.session.add(input_title)
+            db.session.commit()
+
+            body['title'] = input_title.title
+            body['id'] = input_title.id
+        else:
+            abort(400)
+    except Exception as e:
+        error = True
+        print('Error Occured: ', e)
+    finally:
+        db.session.close()
+
+    if error:
+        abort(422)
+    else:
+        return make_response(jsonify(body), 201)
+
+@view.route('/titles/<int:id>', methods=['PUT'])
 def putTitle(id):
     '''
     Update a single title
-    '''
-    return {'message': 'API will update {} title'.format(id)}, 200
 
-@view.route('/titles', methods=['PATCH'])
-def patchTitles():
-    '''
-    Partially update all titles
-    '''
-    return {'message': 'API will partially update all titles'}, 200
+    Params:
+        id (int): primary key of the target
 
-@view.route('/titles/<id>', methods=['PATCH'])
-def patchTitle(id):
+    Returns:
+        body (JSON) - {'id': <id>, 'title': '<title>'}
     '''
-    Partially update a single title
-    '''
-    return {'message': 'API will partially update {} title'.format(id)}, 200
+    error = False
+    body = {}
+    return_status = 500
 
-@view.route('/titles', methods=['DELETE'])
-def deleteTitles():
-    '''
-    Delete all titles
-    '''
-    return {'message': 'API will delete all titles'}, 200
+    try:
+        if request.is_json:
+            input_request = request.get_json()
+            
+            request_title = Title.query.get(id)
 
-@view.route('/titles/<id>', methods=['DELETE'])
+            if request_title:
+                request_title.title = input_request['title']
+                return_status = 200
+            else:
+                request_title = Title(title=input_request['title'])
+                db.session.add(request_title)
+                return_status = 201
+
+            
+            db.session.commit()
+
+            body['title'] = request_title.title
+            body['id'] = request_title.id
+        else:
+            abort(400)
+    except Exception as e:
+        error = True
+        print('Error Occured: ', e)
+    finally:
+        db.session.close()
+
+    if error:
+        abort(422)
+    else:
+        return make_response(jsonify(body), return_status)
+
+@view.route('/titles/<int:id>', methods=['DELETE'])
 def deleteTitle(id):
     '''
     Delete a single title
+
+    Parameters:
+        id (int): primary key of the target
     '''
-    return {'message': 'API will delete {} title'.format(id)}, 200
+    error = False
+    body = {}
+
+    try:
+        input_title = Title.query.get(id)
+        db.session.delete(input_title)
+        db.session.commit()
+        body['message'] = 'Resource Successsfully Deleted'
+    except Exception as e:
+        error = True
+        print('Error Occured: ', e)
+    finally:
+        db.session.close()
+
+    if error:
+        abort(422)
+    else:
+        return make_response(jsonify(body), 204)
