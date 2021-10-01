@@ -120,20 +120,51 @@ def postTitles():
     else:
         return make_response(jsonify(body), 201)
 
-@view.route('/titles/<id>', methods=['PUT'])
+@view.route('/titles/<int:id>', methods=['PUT'])
 def putTitle(id):
     '''
     Update a single title
-    '''
-    return {'message': 'API will update {} title'.format(id)}, 200
 
+    Params:
+        id (int): primary key of the target
 
-@view.route('/titles/<id>', methods=['PATCH'])
-def patchTitle(id):
+    Returns:
+        body (JSON) - {'id': <id>, 'title': '<title>'}
     '''
-    Partially update a single title
-    '''
-    return {'message': 'API will partially update {} title'.format(id)}, 200
+    error = False
+    body = {}
+    return_status = 500
+
+    try:
+        if request.is_json:
+            input_request = request.get_json()
+            
+            request_title = Title.query.get(id)
+
+            if request_title:
+                request_title.title = input_request['title']
+                return_status = 200
+            else:
+                request_title = Title(title=input_request['title'])
+                return_status = 201
+
+            db.session.add(request_title)
+            db.session.commit()
+
+            body['title'] = request_title.title
+            body['id'] = request_title.id
+        else:
+            abort(400)
+    except Exception as e:
+        error = True
+        print('Error Occured: ', e)
+    finally:
+        db.session.close()
+
+    if error:
+        abort(422)
+    else:
+        return make_response(jsonify(body), return_status)
 
 @view.route('/titles/<int:id>', methods=['DELETE'])
 def deleteTitle(id):

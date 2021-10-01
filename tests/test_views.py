@@ -130,6 +130,39 @@ class FlaskTest(unittest.TestCase):
         self.assertEqual(response_message['title'], 'Rick and Morty')
         self.assertEqual(response_message['id'], 9)
 
+    def test_putTitle(self):
+        response = self.client.put('/titles/14'
+                                   , headers={'Content-Type': 'application/json'}
+                                   , data=json.dumps({'title': 'A Clockwork Orange'}))
+        
+        statuscode = response.status_code
+        response_type = response.is_json
+        response_message = response.get_json()
+
+        # Check for response 201
+        self.assertEqual(statuscode, 201)
+        # Check if response is application/json
+        self.assertEqual(response_type, True)
+        # Check response content: client recieves id and title
+        self.assertEqual(response_message['title'], 'A Clockwork Orange')
+        self.assertEqual(response_message['id'], 9)
+
+        response = self.client.put('/titles/9'
+                                   , headers={'Content-Type': 'application/json'}
+                                   , data=json.dumps({'title': '2001: A Space Odyssey'}))
+        
+        statuscode = response.status_code
+        response_type = response.is_json
+        response_message = response.get_json()
+
+        # Check for response 200
+        self.assertEqual(statuscode, 200)
+        # Check if response is application/json
+        self.assertEqual(response_type, True)
+        # Check response content: client recieves id and title
+        self.assertEqual(response_message['title'], '2001: A Space Odyssey')
+        self.assertEqual(response_message['id'], 9)
+
     def test_deleteTitle(self):
         response = self.client.delete('/titles/1')
         

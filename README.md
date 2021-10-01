@@ -65,8 +65,6 @@ Utilizing dataset sourced from BoxOfficeMojo (BOM) Python WebScraper, https://gi
         /api/v1/titles -> create a new title
     PUT
         /api/v1/titles/{id} -> update a single title
-    PATCH
-        /api/v1/titles/{id} -> partial update a single title
     DELETE
         /api/v1/titles/{id} -> delete a single title
 
