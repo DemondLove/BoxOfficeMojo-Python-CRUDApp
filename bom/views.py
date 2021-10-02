@@ -41,8 +41,16 @@ def getTitles():
     '''
     Get all titles w/ pagination
 
+    Parameters:
+        page (int): Optional query parameter to control the page number returned
+        limit (int): Optional query parameter to control the number of titles returned per page (default: 8)
+
     Returns:
-        body (JSON) - {'titles': [{'id': <id>, 'title': <title>}, {'id': <id>, 'title': <title>}, ...]}
+        body (JSON) - {'titles': [{'id': <id>, 'title': <title>}, {'id': <id>, 'title': <title>}, ...]
+                       , 'prev_url': <Endpoint to the previous page w/ page query param w/o limit query param>
+                       , 'next_url': <Endpoint to the next page w/ page query param w/o limit query param>
+                       , 'count': <total number of records in titles dataset>
+                      }
     '''
     error = False
     body = {}
