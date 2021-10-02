@@ -81,7 +81,5 @@ Utilizing dataset sourced from BoxOfficeMojo (BOM) Python WebScraper, https://gi
 
 ### TODO
 Add:
-- Add reset database migration
-- OPTIONS endpoint
 - API Documentation w/ Swagger
 - Add Top X GET APIs
