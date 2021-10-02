@@ -63,6 +63,35 @@ class FlaskTest(unittest.TestCase):
                                                       ,{'id': 6, 'title': 'Somewhere'}
                                                       ,{'id': 7, 'title': 'Community'}
                                                       ,{'id': 8, 'title': 'The Bourne Identity'}])
+        # Check response content: client recieves no prev page
+        self.assertEqual(response_message['prev_url'], None)
+        # Check response content: client recieves no next page
+        self.assertEqual(response_message['next_url'], None)
+        # Check response content: client recieves proper count
+        self.assertEqual(response_message['count'], 8)
+
+        response = self.client.get('/api/v1/titles?page=2&limit=3')
+        
+        statuscode = response.status_code
+        response_type = response.is_json
+        response_message = response.get_json()
+        
+        # Check for response 200
+        self.assertEqual(statuscode, 200)
+        # Check if response is application/json
+        self.assertEqual(response_type, True)
+        # Check response content: client recieves all ids and titles
+        self.assertEqual(response_message['titles'], [{'id': 4, 'title': 'The Dark Knight'}
+                                                      ,{'id': 5, 'title': 'Drive'}
+                                                      ,{'id': 6, 'title': 'Somewhere'}])
+        # Check response content: client recieves no prev page
+        self.assertEqual(response_message['prev_url'], '/api/v1/titles?page=1')
+        # Check response content: client recieves no next page
+        self.assertEqual(response_message['next_url'], '/api/v1/titles?page=3')
+        # Check response content: client recieves proper count
+        self.assertEqual(response_message['count'], 8)
+
+
 
     def test_getTitle(self):
         response = self.client.get('/api/v1/titles/1')

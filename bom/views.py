@@ -1,5 +1,5 @@
 from bom import db
-from flask import Blueprint, request, jsonify, make_response, abort
+from flask import Blueprint, request, jsonify, make_response, abort, url_for
 from bom.models import Title
 
 view = Blueprint('view', __name__)
@@ -51,6 +51,25 @@ def getTitles():
         query_results = Title.query.all()
         all_titles = [{'id': result.id, 'title': result.title} for result in query_results]
         body = {'titles': all_titles}
+        
+        page = request.args.get('page', 1, type=int)
+        limit = request.args.get('limit', 8, type=int)
+        paginate = Title.query.paginate(page=page, per_page=limit, error_out=False)
+        paginated_titles = [{'id': result.id, 'title': result.title} for result in paginate.items]
+        
+        prev_url = None
+        if paginate.has_prev:
+            prev_url = url_for('view.getTitles', page=page-1)
+
+        next_url = None
+        if paginate.has_next:
+            next_url = url_for('view.getTitles', page=page+1)
+
+        body = {'titles': paginated_titles
+                , 'prev_url': prev_url
+                , 'next_url': next_url
+                , 'count': paginate.total
+               }
     except Exception as e:
         error = True
         print('Error Occured: ', e)
