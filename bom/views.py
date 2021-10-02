@@ -4,6 +4,7 @@ from bom.models import Title
 
 view = Blueprint('view', __name__)
 
+
 # Status Code Errors
 @view.errorhandler(400)
 def handle_400_error(_error):
@@ -24,6 +25,7 @@ def handle_422_error(_error):
 @view.errorhandler(500)
 def handle_500_error(_error):
     return make_response(jsonify({'Error': 'Internal Server Error'}), 500)
+
 
 @view.route('/', methods=['GET'])
 def index():
