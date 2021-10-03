@@ -78,6 +78,7 @@ Utilizing dataset sourced from BoxOfficeMojo (BOM) Python WebScraper, https://gi
 - AWS API Gateway
 - AWS Lambda
 - AWS RDS - MySQL
+- Zappa
 
 ### TODO
 Add:
